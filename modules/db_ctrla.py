@@ -1,15 +1,32 @@
+import os
+
 import MySQLdb
+from dotenv import load_dotenv
 
 from modules.objects import Post, Blogger
 
 
 class DB:
     def __init__(self):
-        pass
+        load_dotenv()
+        create_table_stmt = "CREATE TABLE IF NOT EXISTS posts(" \
+                            "post_id INT AUTO_INCREMENT," \
+                            "author TEXT NOT NULL," \
+                            "title TEXT NOT NULL," \
+                            "content TEXT NOT NULL," \
+                            "date_posted TEXT NOT NULL," \
+                            "is_public TEXT NOT NULL," \
+                            "likes TEXT NOT NULL," \
+                            "category TEXT NOT NULL" \
+                            "PRIMARY KEY (project_id));"
+        self.db_write(create_table_stmt)
 
     @staticmethod
     def db_read(stmt: str) -> list:
-        db = MySQLdb.connect("", "", "", "")
+        db = MySQLdb.connect(os.getenv("host"),
+                             os.getenv("user"),
+                             os.getenv("passwd"),
+                             os.getenv("db"))
         cursor = db.cursor()
         try:
             cursor.execute(stmt)
@@ -19,7 +36,10 @@ class DB:
 
     @staticmethod
     def db_write(stmt: str):
-        db = MySQLdb.connect("", "", "", "")
+        db = MySQLdb.connect(os.getenv("host"),
+                             os.getenv("user"),
+                             os.getenv("passwd"),
+                             os.getenv("db"))
         cursor = db.cursor()
         try:
             cursor.execute(stmt)
