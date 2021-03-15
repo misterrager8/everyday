@@ -1,2 +1,4 @@
 mysqlclient
 python-dotenv
+SQLAlchemy
+Flask
