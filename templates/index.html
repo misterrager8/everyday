@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body %}
+<title>Home</title>
+<div class="container">
+  <h1 class="text-center m-5">Markdown Locker</h1>
+  <div class="list-group border">
+    {% for i in files %}
+    <a href="{{ url_for('note_pg', filename=i + '.md') }}"
+       class="list-group-item list-group-item-action border-0">{{ i }}</a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

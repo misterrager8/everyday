@@ -1,4 +1,2 @@
-mysqlclient
-python-dotenv
-SQLAlchemy
+Markdown
 Flask
