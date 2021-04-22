@@ -29,5 +29,17 @@ def note_pg():
     return render_template("note.html", content=markdown_to_html(filename), title=filename.split(".md")[0])
 
 
+@app.route("/add_note", methods=["POST", "GET"])
+def add_note():
+    if request.method == "POST":
+        title = request.form["title"]
+        content = request.form["content"]
+
+        with open("./docs/%s.md" % title, "w") as f:
+            f.write(content)
+
+    return render_template("add_note.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

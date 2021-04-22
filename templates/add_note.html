@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+  <form action="{{ url_for('add_note') }}" method="POST" class="col-6 offset-lg-3">
+    <input class="form-control" type="text" name="title" autocomplete="off" placeholder="Title">
+    <textarea class="form-control" rows="10" name="content" autocomplete="off"
+              placeholder="Write content here"></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}
