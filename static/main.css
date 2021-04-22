@@ -1,0 +1,7 @@
+.unstyled-link:hover {
+text-decoration: none;
+}
+
+.note-form * {
+margin: 10px;
+}

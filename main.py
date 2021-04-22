@@ -1,7 +1,7 @@
 import os
 
 import markdown
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -38,8 +38,18 @@ def add_note():
         with open("./docs/%s.md" % title, "w") as f:
             f.write(content)
 
+        return redirect(url_for("index"))
+
     return render_template("add_note.html")
 
 
+@app.route("/delete_note")
+def delete_note():
+    filename = request.args.get("filename")
+    os.remove("./docs/%s.md" % filename)
+
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
