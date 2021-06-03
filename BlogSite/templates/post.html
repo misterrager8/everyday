@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block body %}
+
+<title>{{ post_.title }}</title>
+{% call macros.title_div(post_.title, size='4', class='m-5') %}{% endcall %}
+
+<p>{{ post_.content }}</p>
+
+{% endblock %}

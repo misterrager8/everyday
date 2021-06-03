@@ -1,3 +1,6 @@
 Markdown
 Flask
 gunicorn
+python-dotenv
+SQLAlchemy
+Werkzeug

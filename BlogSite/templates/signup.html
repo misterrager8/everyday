@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block body %}
+<title>Sign Up</title>
+{% call macros.title_div('Sign Up', size='4', class='m-5') %}{% endcall %}
+
+{{ macros.signup_form(class='col-4 offset-4') }}
+
+{% endblock %}
