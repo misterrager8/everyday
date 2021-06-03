@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     password = Column(Text)
     date_created = Column(Date)
     posts = relationship("Post", backref="User")
+    bookmarks = relationship("Post", secondary="user_bookmark_assocs")
     id = Column(Integer, primary_key=True)
 
     def __init__(self,
@@ -50,6 +51,13 @@ class Post(db.Model):
 
     def __str__(self):
         return "%d\t%s" % (self.id, self.title)
+
+
+class Assoc(db.Model):
+    __tablename__ = "user_bookmark_assocs"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("posts.id"), primary_key=True)
 
 
 db.create_all()
