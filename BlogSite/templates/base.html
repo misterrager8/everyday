@@ -45,7 +45,7 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">{{ user_icon() }}</a>
         <div class="dropdown-menu">
           {% if current_user.is_authenticated %}
-          <a href="{{ url_for('profile') }}" class="dropdown-item">Profile</a>
+          <a href="{{ url_for('profile', id_=current_user.id) }}" class="dropdown-item">Profile</a>
           <a href="{{ url_for('account') }}" class="dropdown-item">Account</a>
           <a href="{{ url_for('user_logout') }}" class="dropdown-item">Log-Out</a>
           {% else %}
