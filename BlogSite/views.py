@@ -38,7 +38,8 @@ def account():
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    id_: int = request.args.get("id_")
+    return render_template("profile.html", person=db.session.query(User).get(id_))
 
 
 @app.route("/people")

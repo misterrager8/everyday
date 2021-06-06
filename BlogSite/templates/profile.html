@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<title>Profile</title>
-{% call macros.title_div('Profile', size='4', class='m-5') %}{% endcall %}
+<title>{{ person.username }}</title>
+{% call macros.title_div(person.username, size='4', class='m-5') %}{% endcall %}
 
 {% endblock %}
