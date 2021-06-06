@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from flask_login import UserMixin
 from sqlalchemy import Column, Text, Integer, Date, DateTime, Boolean, ForeignKey
@@ -12,18 +12,13 @@ class User(UserMixin, db.Model):
 
     username = Column(Text)
     password = Column(Text)
-    date_created = Column(Date)
+    date_created = Column(Date, default=datetime.today())
     posts = relationship("Post", backref="User")
     bookmarks = relationship("Post", secondary="user_bookmark_assocs")
     id = Column(Integer, primary_key=True)
 
-    def __init__(self,
-                 username: str,
-                 password: str,
-                 date_created: date = date.today()):
-        self.username = username
-        self.password = password
-        self.date_created = date_created
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
 
     def __str__(self):
         return "%d\t%s" % (self.id, self.username)
@@ -35,19 +30,13 @@ class Post(db.Model):
     title = Column(Text)
     content = Column(Text)
     visible = Column(Boolean)
-    date_created = Column(DateTime)
+    date_created = Column(DateTime, default=datetime.now())
     author = Column(Integer, ForeignKey("users.id"))
     id = Column(Integer, primary_key=True)
 
-    def __init__(self,
-                 title: str,
-                 content: str,
-                 visible: bool,
-                 date_created: date = date.today()):
-        self.title = title
-        self.content = content
-        self.visible = visible
-        self.date_created = date_created
+    def in_favs(self, user_id: int) -> bool:
+        _ = db.session.query(User).get(user_id)
+        return self in _.bookmarks
 
     def __str__(self):
         return "%d\t%s" % (self.id, self.title)

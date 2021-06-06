@@ -76,7 +76,7 @@ def user_logout():
 @app.route("/signup", methods=["POST", "GET"])
 def add_user():
     if request.method == "POST":
-        _ = User(request.form["username"], request.form["passwd"])
+        _ = User(username=request.form["username"], password=request.form["passwd"])
         db.session.add(_)
         db.session.commit()
 
