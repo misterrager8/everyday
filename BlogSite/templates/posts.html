@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% import "macros.html" as macros %}
+{% import "macros.html" as macros with context %}
 
 {% block body %}
 
 <title>Posts</title>
 {% call macros.title_div('Posts', size='4', class='m-5') %}{% endcall %}
 
+{{ macros.sort_filter() }}
 {% for i in posts_ %}
 {{ macros.post_list_item(i) }}
 {% endfor %}

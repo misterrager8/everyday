@@ -1,5 +1,6 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from BlogSite import app, db, login_manager
@@ -52,7 +53,12 @@ def favorites():
 
 @app.route("/posts")
 def posts():
-    return render_template("posts.html", posts_=db.session.query(Post).all())
+    order_by: str = request.args.get("order_by", default="posts.date_created desc")
+    return render_template("posts.html", posts_=db.session
+                           .query(Post)
+                           .join(User)
+                           .order_by(text(order_by))
+                           .all(), order_by=order_by)
 
 
 @app.route("/post")
