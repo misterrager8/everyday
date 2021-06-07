@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block body %}
+
+<title>Bookmarks</title>
+{% call macros.title_div('Bookmarks', size='4', class='m-5') %}{% endcall %}
+
+{% for i in favs %}
+
+{% if current_user.is_authenticated %}
+{{ macros.post_list_item(i, current_user) }}
+{% else %}
+{{ macros.post_list_item(i) }}
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}

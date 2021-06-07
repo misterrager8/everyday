@@ -47,9 +47,24 @@ def people():
     return render_template("people.html", ppl=db.session.query(User).all())
 
 
-@app.route("/favorites")
-def favorites():
-    return render_template("favorites.html")
+@app.route("/bookmarks")
+@login_required
+def bookmarks():
+    return render_template("bookmarks.html", favs=current_user.bookmarks)
+
+
+@app.route("/toggle_bookmark")
+def toggle_bookmark():
+    id_: int = request.args.get("id_")
+    post_: Post = db.session.query(Post).get(id_)
+
+    if post_ in current_user.bookmarks:
+        current_user.bookmarks.remove(post_)
+    else:
+        current_user.bookmarks.append(post_)
+
+    db.session.commit()
+    return redirect(request.referrer)
 
 
 @app.route("/posts")
