@@ -66,11 +66,43 @@
 </svg>
 {% endmacro %}
 
-{% macro post_list_item(post_) %}
-<div class="list-group-item list-group-item-action">
-  <p>{{ post_.author }}</p>
-  <p>{{ post_.title }}</p>
-  <p>{{ post_.date_created }}</p>
+{% macro post_list_item(post_, current_user=none) %}
+<div class="list-group-item list-group-item-action border-0 rounded">
+  {% call unstyled_link(href=url_for('profile', id_=post_.author), class='font-weight-light') %}
+  {{ paragraph(post_.User.username, size='.8', class='m-0') }}
+  {% endcall %}
+
+  {% call unstyled_link(href=url_for('post', id_=post_.id), class='font-weight-bold') %}
+  {{ paragraph(post_.title, size='1.5') }}
+  {% endcall %}
+  <div class="d-flex justify-content-between">
+    {{ paragraph(post_.date_created.strftime("%B %d, %Y"), size='.8', class='font-italic') }}
+
+    {% if current_user.is_authenticated and post_ in current_user.bookmarks %}
+    {% call unstyled_link(href=url_for('toggle_bookmark', id_=post_.id)) %}{{ bookmark_on_icon() }}{% endcall %}
+    {% elif current_user.is_authenticated and post_ not in current_user.bookmarks %}
+    {% call unstyled_link(href=url_for('toggle_bookmark', id_=post_.id)) %}{{ bookmark_off_icon() }}{% endcall %}
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro person_list_item(person) %}
+<div class="col-4 card border-0">
+  <div class="card-body border my-3 rounded">
+    {% call unstyled_link(href=url_for('profile', id_=person.id)) %}{{ paragraph(person.username) }}{% endcall %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro sort_filter(class='') %}
+<div class="{{ class }}">
+  Sort by:
+  {% if order_by=="posts.title" %}
+  <span class="badge badge-dark">{% call unstyled_link(href=url_for('posts', order_by='posts.date_created desc'), color='white') %}Date{% endcall %}</span>
+  {% elif order_by=="posts.date_created desc" %}
+  <span class="badge badge-dark">{% call unstyled_link(href=url_for('posts', order_by='posts.title'), color='white') %}Title{% endcall %}</span>
+  {% endif %}
 </div>
 {% endmacro %}
 
