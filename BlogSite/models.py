@@ -34,9 +34,8 @@ class Post(db.Model):
     author = Column(Integer, ForeignKey("users.id"))
     id = Column(Integer, primary_key=True)
 
-    def in_favs(self, user_id: int) -> bool:
-        _ = db.session.query(User).get(user_id)
-        return self in _.bookmarks
+    def __init__(self, **kwargs):
+        super(Post, self).__init__(**kwargs)
 
     def __str__(self):
         return "%d\t%s" % (self.id, self.title)

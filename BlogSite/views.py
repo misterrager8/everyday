@@ -106,7 +106,7 @@ def add_user():
 @login_required
 def editor():
     if request.method == "POST":
-        _ = Post(request.form["title"], request.form["content"], True)
+        _ = Post(title=request.form["title"], content=request.form["content"], visible=True)
         current_user.posts.append(_)
         db.session.commit()
 
