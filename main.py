@@ -1,4 +1,4 @@
-from BlogSite import views
+from JournalSite.views import app
 
-if __name__ == "__main__":
-    views.app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)

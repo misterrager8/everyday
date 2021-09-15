@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block body %}
+<title>Home</title>
+{{ macros.paragraph('Users', class='text-center m-3', size=3) }}
+{{ macros.paragraph('Entries', class='text-center m-3', size=3) }}
+{{ macros.paragraph('Calendar', class='text-center m-3', size=3) }}
+{% endblock %}

@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% import "macros.html" as macros %}
-
-{% block body %}
-
-<title>{{ person.username }}</title>
-{% call macros.title_div(person.username, size='4', class='m-5') %}{% endcall %}
-
-{% endblock %}
