@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros with context %}
+
+{% block body %}
+<title>{{ entry.date_created.strftime('%B %-d, %Y %I:%M %p') }}</title>
+{{ macros.editor(entry, class='my-3') }}
+{% endblock %}

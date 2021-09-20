@@ -7,9 +7,9 @@
 {% endmacro %}
 
 {% macro modal(id, title='', class='', lg=false) %}
-<div class="modal">
+<div class="modal" id="{{ id }}">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content p-3">
       {% if title %}{{ paragraph(title, class='text-center m-3', size=2) }}{% endif %}
       {{ caller() }}
     </div>
@@ -23,4 +23,35 @@
   <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
   <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
 </svg>
+{% endmacro %}
+
+{% macro user_icon(size=20, color='inherit', class='') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-person-fill {{ class }}" viewBox="0 0 16 16">
+  <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+</svg>
+{% endmacro %}
+
+{% macro entry_list_item(entry, class='') %}
+<div class="list-group-item list-group-item-action border-0 d-flex justify-content-between">
+  <a href="{{ url_for('entry', id_=entry.id) }}" class="link">{{ entry.date_created.strftime('%B %-d, %Y %I:%M %p') }}</a>
+  <a href="#" class="link text-danger" data-bs-toggle="dropdown" data-bs-target="delete_{{ entry.id }}">X</a>
+  <div class="dropdown-menu" id="delete_{{ entry.id }}">
+    <a href="{{ url_for('entry_delete', id_=entry.id) }}" class="dropdown-item text-danger">Delete</a>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro login_form(class='') %}
+<form action="{{ url_for('login') }}" method="POST" class="{{ class }} form-group">
+  <input type="text" autocomplete="off" placeholder="Username" name="username" class="form-control mb-2">
+  <input type="password" autocomplete="off" placeholder="Password" name="password" class="form-control mb-2">
+  <button type="submit" class="btn btn-dark w-100">Log In</button>
+</form>
+{% endmacro %}
+
+{% macro editor(entry, class='') %}
+<form method="POST" action="{{ url_for('editor', id_=entry.id) }}" class="form-group {{ class }}">
+  <textarea autocomplete="off" rows="25" class="form-control mb-2" name="content" style="white-space: pre-wrap;">{{ entry.content }}</textarea>
+  <button type="submit" class="btn btn-dark w-100">Save</button>
+</form>
 {% endmacro %}

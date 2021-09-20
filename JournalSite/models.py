@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     username = Column(Text)
     password = Column(Text)
     date_created = Column(DateTime)
-    entries = relationship("Entry", backref="user", lazy="dynamic")
+    entries = relationship("Entry", backref="user_", lazy="dynamic")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -36,6 +36,9 @@ class Entry(db.Model):
 
     def __str__(self):
         return self
+
+
+db.create_all()
 
 
 class Database:
@@ -63,7 +66,7 @@ class Database:
         db.session.commit()
 
     @staticmethod
-    def search(type_, order_by: str, filter_: str):
+    def search(type_, order_by: str = "", filter_: str = ""):
         return db.session.query(type_).order_by(text(order_by)).filter(text(filter_)).all()
 
     @staticmethod

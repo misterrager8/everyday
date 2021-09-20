@@ -1,9 +1,15 @@
 {% extends "base.html" %}
-{% import "macros.html" as macros %}
+{% import "macros.html" as macros with context %}
 
 {% block body %}
 <title>Home</title>
-{{ macros.paragraph('Users', class='text-center m-3', size=3) }}
-{{ macros.paragraph('Entries', class='text-center m-3', size=3) }}
-{{ macros.paragraph('Calendar', class='text-center m-3', size=3) }}
+{% if not current_user.is_anonymous %}
+{{ macros.paragraph('Entries', class='text-center', size=3) }}
+<a href="{{ url_for('entry_add') }}" class="link">{{ macros.paragraph('+', size=3, class='text-center text-success') }}</a>
+{% for i in entries %}
+{{ macros.entry_list_item(i) }}
+{% endfor %}
+{% else %}
+None found.
+{% endif %}
 {% endblock %}
