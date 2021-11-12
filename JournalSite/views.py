@@ -47,7 +47,9 @@ def index():
 @app.route("/entry_create", methods=["POST"])
 @login_required
 def entry_create():
-    new_entry = Entry(content=request.form["content"], date_created=datetime.datetime.now(), user=current_user.id,
+    new_entry = Entry(content=request.form["content"].capitalize(),
+                      date_created=datetime.datetime.now(),
+                      user=current_user.id,
                       color="#{:06x}".format(random.randint(0, 0xFFFFFF)))
     database.create(new_entry)
 
