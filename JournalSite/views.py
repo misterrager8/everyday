@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from flask import render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -8,12 +9,12 @@ from werkzeug.utils import redirect
 from JournalSite import app, login_manager, db
 from JournalSite.models import Database, Entry, User
 
-_ = Database()
+database = Database()
 
 
 @login_manager.user_loader
 def load_user(user_id: int):
-    return _.read(User, user_id)
+    return database.get(User, user_id)
 
 
 @app.route("/login", methods=["POST"])
@@ -38,45 +39,35 @@ def logout():
 
 @app.route("/")
 def index():
-    return render_template("index.html", entries=_.search(Entry,
-                                                          filter_="entries.user=%s" % current_user.id) if not current_user.is_anonymous else [])
+    return render_template("index.html", entries=database.search(Entry,
+                                                                 filter_="entries.user=%s" % current_user.id,
+                                                                 order_by="date_created desc") if not current_user.is_anonymous else [])
 
 
-@app.route("/entry_add")
+@app.route("/entry_create", methods=["POST"])
 @login_required
-def entry_add():
-    new_entry = Entry(content="", date_created=datetime.datetime.now(), user=current_user.id)
-    _.create(new_entry)
+def entry_create():
+    new_entry = Entry(content=request.form["content"], date_created=datetime.datetime.now(), user=current_user.id,
+                      color="#{:06x}".format(random.randint(0, 0xFFFFFF)))
+    database.create(new_entry)
 
-    return redirect(url_for("editor", id_=new_entry.id))
+    return redirect(request.referrer)
 
 
-@app.route("/entry")
+@app.route("/entry_update", methods=["POST"])
 @login_required
-def entry():
-    entry_: Entry = _.read(Entry, request.args.get("id_"))
+def entry_update():
+    entry_: Entry = database.get(Entry, int(request.form["id_"]))
+    entry_.content = request.form["content"]
+    db.session.commit()
 
-    return render_template("entry.html", entry=entry_)
-
-
-@app.route("/editor", methods=["POST", "GET"])
-@login_required
-def editor():
-    entry_: Entry = _.read(Entry, request.args.get("id_"))
-
-    if request.method == "POST":
-        entry_.content = request.form["content"]
-        db.session.commit()
-
-        return redirect(url_for("entry", id_=entry_.id))
-
-    return render_template("editor.html", entry=entry_)
+    return redirect(request.referrer)
 
 
 @app.route("/entry_delete")
 @login_required
 def entry_delete():
-    entry_: Entry = _.read(Entry, request.args.get("id_"))
-    _.delete(entry_)
+    entry_: Entry = database.get(Entry, request.args.get("id_"))
+    database.delete(entry_)
 
     return redirect(request.referrer)

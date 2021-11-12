@@ -1,5 +1,3 @@
-import datetime
-
 from flask_login import UserMixin
 from sqlalchemy import Integer, Column, Text, DateTime, ForeignKey, text
 from sqlalchemy.orm import relationship
@@ -28,6 +26,7 @@ class Entry(db.Model):
 
     id = Column(Integer, primary_key=True)
     content = Column(Text)
+    color = Column(Text)
     date_created = Column(DateTime)
     user = Column(Integer, ForeignKey("users.id"))
 
@@ -51,14 +50,8 @@ class Database:
         db.session.commit()
 
     @staticmethod
-    def read(type_, id_: int):
+    def get(type_, id_: int):
         return db.session.query(type_).get(id_)
-
-    @staticmethod
-    def update(object_, **kwargs):
-        for key, value in kwargs.items():
-            object_.key = value
-        db.session.commit()
 
     @staticmethod
     def delete(object_):
@@ -73,20 +66,3 @@ class Database:
     def execute_stmt(stmt: str):
         db.session.execute(stmt)
         db.session.commit()
-
-
-class Calendar:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def get_week(day: datetime.date) -> list:
-        return [day - datetime.timedelta(days=i) for i in range(0, 7)]
-
-    @staticmethod
-    def get_month(day: datetime.date) -> list:
-        return [day - datetime.timedelta(days=i) for i in range(0, 30)]
-
-    @staticmethod
-    def get_year(day: datetime.date) -> list:
-        return [day - datetime.timedelta(days=i) for i in range(0, 365)]
