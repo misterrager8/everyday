@@ -30,7 +30,7 @@
 {% endmacro %}
 
 {% macro entry_card(entry, class='') %}
-<div class="card col-4 border-0">
+<div class="card col-xl-4 border-0">
   <div class="card-body m-3 shadow-sm p-0" style="border-radius:10px; background-color:{{ entry.color }}; color:white;">
     <div class="card-header p-3">
       {{ paragraph(entry.date_created.strftime('%B %-d, %Y %I:%M %p'), size=0.9, class='fst-italic') }}
