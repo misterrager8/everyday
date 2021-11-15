@@ -22,7 +22,9 @@
     <div class="collapse navbar-collapse" id="nav_content">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link" data-bs-target="#user_dd" data-bs-toggle="dropdown">{{ macros.user_icon(color='white') }}</a>
+          <a href="#" class="nav-link" data-bs-target="#user_dd" data-bs-toggle="dropdown">
+            {% if not current_user.is_anonymous %}<span class="me-3">{{ current_user.username }}</span>{% endif %}
+            {{ macros.user_icon(color='white') }}</a>
           <div class="dropdown-menu dropdown-menu-end" id="user_dd">
             {% if not current_user.is_anonymous %}
             <a href="{{ url_for('logout') }}" class="dropdown-item">Sign-Out</a>
