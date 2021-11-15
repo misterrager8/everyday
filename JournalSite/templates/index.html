@@ -7,7 +7,7 @@
 {{ macros.entry_create_form(class='my-3') }}
 
 <div class="grid" id="allEntries">
-  {% for i in entries %}
+  {% for i in current_user.get_entries() %}
   {{ macros.entry_card(i) }}
   {% endfor %}
 </div>

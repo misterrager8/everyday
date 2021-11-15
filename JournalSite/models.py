@@ -17,6 +17,9 @@ class User(db.Model, UserMixin):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
+    def get_entries(self):
+        return self.entries.order_by(text("date_created desc"))
+
     def __str__(self):
         return self.username
 

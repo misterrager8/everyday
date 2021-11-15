@@ -39,9 +39,7 @@ def logout():
 
 @app.route("/")
 def index():
-    return render_template("index.html", entries=database.search(Entry,
-                                                                 filter_="entries.user=%s" % current_user.id,
-                                                                 order_by="date_created desc") if not current_user.is_anonymous else [])
+    return render_template("index.html")
 
 
 @app.route("/entry_create", methods=["POST"])
