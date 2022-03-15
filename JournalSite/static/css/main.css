@@ -1,0 +1,64 @@
+a, a:hover {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none; }
+
+  .heading1, .heading2, .heading3 {
+    font-weight: bold; }
+
+    .heading1 {
+      font-size: 2.5em; }
+
+      .heading2 {
+        font-size: 2em; }
+
+        .heading3 {
+          font-size: 1.5em; }
+
+          .navbar, .btn-custom, .badge-custom {
+            background-color: white;
+            color: black; }
+
+            body, .modal-content, .input-custom, .card {
+              background-color: black;
+              color: white; }
+
+              .input-custom {
+                border: 1px solid white;
+                border-radius: 5px;
+                padding: 3px 10px; }
+
+                .btn-custom, .badge-custom {
+                  font-weight: bold;
+                  letter-spacing: 4px;
+                  text-transform: uppercase;
+                  padding: 0px 10px;
+                  border-radius: 5px; }
+
+                  .badge-custom {
+                    font-size: 0.75em; }
+
+                    .btn-custom {
+                      font-size: 0.9em; }
+
+                      .btn-custom:hover {
+                        border: 1px solid white;
+                        border-radius: 5px;
+                        background-color: black;
+                        color: white;
+                        transition: background-color 0.25s, color 0.25s; }
+
+                        .card-body {
+                          border: 1px solid white;
+                          border-radius: 5px;
+                          margin-bottom: 30px; }
+
+                          .p-custom {
+                            font-weight: bold;
+                            letter-spacing: 4px;
+                            text-transform: uppercase; }
+
+                            .btn-delete {
+                              border-radius: 50%;
+                              background-color: #f33;
+                              padding: 5px 5px; }

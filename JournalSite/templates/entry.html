@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros with context %}
+
+{% block body %}
+<title>myJournal</title>
+{{ macros.entry_editor(entry_) }}
+{% endblock %}

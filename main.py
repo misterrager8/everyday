@@ -1,4 +1,7 @@
-from JournalSite.views import app
+import config
+from JournalSite import create_app
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app = create_app(config)
+
+if __name__ == "__main__":
+    app.run()

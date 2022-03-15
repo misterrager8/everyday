@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros with context %}
+
+{% block body %}
+<title>{{ book_.name }}</title>
+<p class="heading1 text-center">{{ book_.name }}</p>
+<span class="spinner-border spinner-border-sm me-2" id="spinner" style="display:none"></span>
+<a class="btn-custom" href="{{ url_for('entries.create_entry', book=book_.id) }}">+ New Entry</a>
+
+<div class="row">
+  {% for i in book_.get_entries() %}
+  {{ macros.entry_card(i) }}
+  {% endfor %}
+</div>
+{% endblock %}

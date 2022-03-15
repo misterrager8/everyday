@@ -12,16 +12,34 @@ class User(db.Model, UserMixin):
     username = Column(Text)
     password = Column(Text)
     date_created = Column(DateTime)
-    entries = relationship("Entry", backref="user_", lazy="dynamic")
+    entries = relationship("Entry", backref="users", lazy="dynamic")
+    books = relationship("Book", backref="users", lazy="dynamic")
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
 
-    def get_entries(self):
-        return self.entries.order_by(text("date_created desc"))
+    def get_entries(self, filter_: str = "", order_by: str = "date_created desc"):
+        return self.entries.filter(text(filter_)).order_by(text(order_by))
 
-    def __str__(self):
-        return self.username
+    def get_books(self, filter_: str = "", order_by: str = "date_created desc"):
+        return self.books.filter(text(filter_)).order_by(text(order_by))
+
+
+class Book(db.Model):
+    __tablename__ = "books"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    color = Column(Text)
+    date_created = Column(DateTime)
+    entries = relationship("Entry", backref="books", lazy="dynamic")
+    user = Column(Integer, ForeignKey("users.id"))
+
+    def __init__(self, **kwargs):
+        super(Book, self).__init__(**kwargs)
+
+    def get_entries(self, filter_: str = "", order_by: str = "date_created desc"):
+        return self.entries.filter(text(filter_)).order_by(text(order_by))
 
 
 class Entry(db.Model):
@@ -29,43 +47,9 @@ class Entry(db.Model):
 
     id = Column(Integer, primary_key=True)
     content = Column(Text)
-    color = Column(Text)
     date_created = Column(DateTime)
+    book = Column(Integer, ForeignKey("books.id"))
     user = Column(Integer, ForeignKey("users.id"))
 
     def __init__(self, **kwargs):
         super(Entry, self).__init__(**kwargs)
-
-    def __str__(self):
-        return self
-
-
-db.create_all()
-
-
-class Database:
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def create(object_):
-        db.session.add(object_)
-        db.session.commit()
-
-    @staticmethod
-    def get(type_, id_: int):
-        return db.session.query(type_).get(id_)
-
-    @staticmethod
-    def delete(object_):
-        db.session.delete(object_)
-        db.session.commit()
-
-    @staticmethod
-    def search(type_, order_by: str = "", filter_: str = ""):
-        return db.session.query(type_).order_by(text(order_by)).filter(text(filter_)).all()
-
-    @staticmethod
-    def execute_stmt(stmt: str):
-        db.session.execute(stmt)
-        db.session.commit()

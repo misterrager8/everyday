@@ -2,15 +2,18 @@
 {% import "macros.html" as macros with context %}
 
 {% block body %}
-<title>Home</title>
+<title>myJournal</title>
 {% if not current_user.is_anonymous %}
-{{ macros.entry_create_form(class='my-3') }}
-
-<div class="grid" id="allEntries">
-  {% for i in current_user.get_entries() %}
-  {{ macros.entry_card(i) }}
-  {% endfor %}
+<span class="spinner-border spinner-border-sm me-2" id="spinner" style="display:none"></span>
+<a class="btn-custom" onclick="toggleDiv('bookCreate')">+ New Book</a>
+<div id="bookCreate" style="display:none" class="my-3">
+  {{ macros.book_create_form() }}
 </div>
 
+<div class="row">
+  {% for i in current_user.get_books() %}
+  {{ macros.book_card(i) }}
+  {% endfor %}
+</div>
 {% endif %}
 {% endblock %}
