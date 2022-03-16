@@ -24,6 +24,12 @@
 </svg>
 {% endmacro %}
 
+{% macro delete_icon(size=20, color='currentcolor', class='') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-trash3-fill {{ class }}" viewBox="0 0 16 16">
+  <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+</svg>
+{% endmacro %}
+
 <!--CARDS-->
 {% macro book_card(book) %}
 <div class="card col-xl-4">
@@ -31,8 +37,8 @@
     <span class="pe-2 heading2" contenteditable="true" onkeydown="editBook({{ book.id }}, event)" id="name{{ book.id }}">{{ book.name }}</span><br>
     <a href="{{ url_for('books.book', id_=book.id) }}" class="btn-custom">{{ '%s entries' % book.get_entries().count() }}</a>
     <div class="mt-3">
-      <a class="btn-delete" onclick="toggleDiv('deleteBook' + {{ book.id }})">Delete</a>
-      <a class="btn-custom bg-danger" onclick="deleteBook({{ book.id }})" id="deleteBook{{ book.id }}" style="display:none">Delete?</a>
+      <a class="text-danger" onclick="toggleDiv('deleteBook' + {{ book.id }})">{{ delete_icon() }}</a>
+      <a class="p-custom text-danger ms-2" onclick="deleteBook({{ book.id }})" id="deleteBook{{ book.id }}" style="display:none">Delete?</a>
     </div>
   </div>
 </div>
@@ -41,11 +47,13 @@
 {% macro entry_card(entry) %}
 <div class="card col-xl-3">
   <div class="card-body">
-    <a class="heading3" href="{{ url_for('entries.edit_entry', id_=entry.id) }}">{{ entry.date_created.strftime('%F %T') }}</a>
-    <a style="background-color: {{ entry.books.color }}" class="btn-custom" href="{{ url_for('books.book', id_=entry.book) }}">{{ entry.books.name }}</a>
+    <a class="heading3" href="{{ url_for('entries.edit_entry', id_=entry.id) }}">{{ entry.date_created.strftime('%F %T') }}</a><br>
+    <a style="background-color: {{ entry.books.color }}" class="btn-custom"
+       href="{% if entry.book %}{{ url_for('books.book', id_=entry.book) }}{% else %}{{ url_for('index', filter_='book is null') }}{% endif %}"
+    >{{ entry.books.name or 'Unsorted' }}</a>
     <div class="mt-3">
-      <a class="text-danger me-2" onclick="toggleDiv('deleteEntry' + {{ entry.id }})">X</a>
-      <a class="btn-custom bg-danger" onclick="deleteEntry({{ entry.id }})" id="deleteEntry{{ entry.id }}" style="display:none">Delete?</a>
+      <a class="text-danger" onclick="toggleDiv('deleteEntry' + {{ entry.id }})">{{ delete_icon() }}</a>
+      <a class="p-custom text-danger ms-2" onclick="deleteEntry({{ entry.id }})" id="deleteEntry{{ entry.id }}" style="display:none">Delete?</a>
     </div>
   </div>
 </div>
@@ -91,12 +99,13 @@
 {% macro entry_editor(entry) %}
 <form onsubmit="event.preventDefault(); editEntry({{ entry.id }});">
   <select id="book" class="input-custom w-100 mb-3 heading3" onchange="editEntry({{ entry.id }})" style="border-color: {{ entry.books.color }}">
+    <option value="">Unsorted</option>
     {% for i in current_user.get_books() %}
     <option value="{{ i.id }}" {% if i.id== entry.book %}selected{% endif %}>{{ i.name }}</option>
     {% endfor %}
   </select>
   {{ toolbar(class='mb-3') }}
-  <div class="input-custom mb-3" id="content" contenteditable="true">{{ entry.content | safe}}</div>
+  <div class="input-custom mb-3" id="content" contenteditable="true">{{ entry.content | safe }}</div>
   <button type="submit" class="btn-custom w-100 bg-success"><span class="spinner-border spinner-border-sm" style="display:none" id="spinner"></span> Save</button>
 </form>
 {% endmacro %}
@@ -105,7 +114,7 @@
 {% macro entry_sort(class='') %}
 <div class="{{ class }}">
   <span class="p-custom">Sort By:</span>
-  {% if order_by != 'date_created desc' %}<a class="btn-custom me-2" href="{{ url_for('entries.entries_', order_by='date_created desc') }}">Date Created</a>{% endif %}
-  {% if order_by != 'book' %}<a class="btn-custom" href="{{ url_for('entries.entries_', order_by='book') }}">Book</a>{% endif %}
+  {% if order_by != 'date_created desc' %}<a class="btn-custom me-2" href="{{ url_for('index', order_by='date_created desc') }}">Date Created</a>{% endif %}
+  {% if order_by != 'book' %}<a class="btn-custom" href="{{ url_for('index', order_by='book') }}">Book</a>{% endif %}
 </div>
 {% endmacro %}

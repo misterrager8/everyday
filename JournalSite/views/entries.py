@@ -11,12 +11,6 @@ entries = Blueprint("entries", __name__)
 database = Database()
 
 
-@entries.route("/entries_")
-def entries_():
-    order_by = request.args.get("order_by", default="date_created desc")
-    return render_template("entries.html", order_by=order_by)
-
-
 @entries.route("/create_entry")
 def create_entry():
     _ = Entry(content="",

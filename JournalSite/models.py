@@ -21,6 +21,9 @@ class User(db.Model, UserMixin):
     def get_entries(self, filter_: str = "", order_by: str = "date_created desc"):
         return self.entries.filter(text(filter_)).order_by(text(order_by))
 
+    def get_unsorted(self):
+        return self.get_entries(filter_="book is null")
+
     def get_books(self, filter_: str = "", order_by: str = "date_created desc"):
         return self.books.filter(text(filter_)).order_by(text(order_by))
 

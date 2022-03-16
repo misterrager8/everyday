@@ -45,4 +45,6 @@ def logout():
 
 @current_app.route("/")
 def index():
-    return render_template("index.html")
+    order_by = request.args.get("order_by", default="date_created desc")
+    filter_ = request.args.get("filter_", default="")
+    return render_template("index.html", order_by=order_by, filter_=filter_)

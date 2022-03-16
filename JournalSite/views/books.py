@@ -23,6 +23,11 @@ def create_book():
     return redirect(request.referrer)
 
 
+@books.route("/books_")
+def books_():
+    return render_template("books.html")
+
+
 @books.route("/book")
 def book():
     book_: Book = database.get(Book, int(request.args.get("id_")))
