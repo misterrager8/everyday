@@ -1,7 +1,7 @@
 import datetime
 
 from flask import render_template, request, url_for, current_app
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import redirect
 
@@ -48,3 +48,23 @@ def index():
     order_by = request.args.get("order_by", default="date_created desc")
     filter_ = request.args.get("filter_", default="")
     return render_template("index.html", order_by=order_by, filter_=filter_)
+
+
+@current_app.route("/user")
+def user():
+    return render_template("user.html")
+
+
+@current_app.route("/change_password", methods=["POST"])
+def change_password():
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+    new_password_confirm = request.form["new_password_confirm"]
+
+    if check_password_hash(current_user.password, old_password) and new_password == new_password_confirm:
+        current_user.password = generate_password_hash(new_password)
+        database.update()
+    else:
+        return "Try again."
+
+    return redirect(request.referrer)

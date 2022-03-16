@@ -11,6 +11,17 @@ function formatText(cmd, val) {
     document.execCommand(cmd, false, val);
 }
 
+function changePassword() {
+    $('#spinner').show();
+    $.post('change_password', {
+        old_password: $('#oldPassword').val(),
+        new_password: $('#newPassword').val(),
+        new_password_confirm: $('#newPasswordConfirm').val()
+    }, function(data) {
+        refreshPage();
+    });
+}
+
 function createBook() {
     $('#spinner').show();
     $.post('create_book', {
