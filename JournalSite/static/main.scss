@@ -10,7 +10,7 @@ $body-txt: white;
 
 @mixin p-custom {
     font-weight: bold;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
 }
 
@@ -47,7 +47,7 @@ body, .modal-content, .input-custom, .card {
 }
 
 .badge-custom { font-size: 0.75em; }
-.btn-custom, .btn-delete { font-size: 0.9em; }
+.btn-custom { font-size: 0.9em; }
 
 .btn-custom:hover {
     @include border-custom;
@@ -63,9 +63,4 @@ body, .modal-content, .input-custom, .card {
 
 .p-custom {
     @include p-custom;
-}
-
-.btn-delete {
-    font-weight: bold;
-    color: white;
 }
