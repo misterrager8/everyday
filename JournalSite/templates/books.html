@@ -10,9 +10,13 @@
     {{ macros.book_create_form() }}
   </div>
 </div>
+{% if current_user.get_books().count() > 0 %}
 <div class="row">
   {% for i in current_user.get_books() %}
   {{ macros.book_card(i) }}
   {% endfor %}
 </div>
+{% else %}
+<div class="p-custom text-center p-5 opacity-25">No Books.</div>
+{% endif %}
 {% endblock %}
