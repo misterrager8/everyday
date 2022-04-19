@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from JournalSite import db
+from moodJournal import db
 
 
 class Database:
@@ -8,8 +8,13 @@ class Database:
         pass
 
     @staticmethod
-    def create(object_):
+    def add(object_):
         db.session.add(object_)
+        db.session.commit()
+
+    @staticmethod
+    def add_multiple(objects: list):
+        for i in objects: db.session.add(i)
         db.session.commit()
 
     @staticmethod
@@ -31,8 +36,8 @@ class Database:
         db.session.commit()
 
     @staticmethod
-    def search(type_, order_by: str = "", filter_: str = ""):
-        return db.session.query(type_).order_by(text(order_by)).filter(text(filter_)).all()
+    def search(type_, filter_: str = "", order_by: str = ""):
+        return db.session.query(type_).filter(text(filter_)).order_by(text(order_by))
 
     @staticmethod
     def execute_stmt(stmt: str):

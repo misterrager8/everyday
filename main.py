@@ -1,5 +1,5 @@
 import config
-from JournalSite import create_app
+from moodJournal import create_app
 
 app = create_app(config)
 

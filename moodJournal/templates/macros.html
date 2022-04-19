@@ -1,0 +1,45 @@
+{% macro modal(id, class='') %}
+<div class="modal" id="{{ id }}">
+  <div class="modal-dialog">
+    <div class="modal-content p-3 {{ class }}">
+      {{ caller() }}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro entry_card(entry, class='') %}
+<div class="card col-xl-4 {{ class }}">
+  <div class="card-body my-3">
+    <i style="color:{{ entry.mood }}" class="bi bi-circle-fill"></i>
+    {{ entry.content[:10] }}
+    <small class="text-muted font-italic">{{ entry.date_created.strftime('%F') }}</small>
+    <a class="text-danger" onclick="toggleDiv('deleteEntry' + {{ entry.id }})"><i class="bi bi-trash3"></i></a>
+    <a class="text-danger font-custom" style="display:none" id="deleteEntry{{ entry.id }}" onclick="entryDelete({{ entry.id }})">Delete?</a>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro login_form(class='') %}
+<form method="POST" action="{{ url_for('login') }}" class="{{ class }}">
+  <input autocomplete="off" name="username" placeholder="Username" class="input-custom w-100 mb-3" type="text">
+  <input autocomplete="off" name="password" placeholder="Password" class="input-custom w-100 mb-3" type="password">
+  <button class="btn-custom w-100">log in</button>
+</form>
+{% endmacro %}
+
+{% macro signup_form(class='') %}
+<form method="POST" action="{{ url_for('signup') }}" class="{{ class }}">
+  <input autocomplete="off" name="username" placeholder="Username" class="input-custom w-100 mb-3" type="text">
+  <input autocomplete="off" name="password" placeholder="Password" class="input-custom w-100 mb-3" type="password">
+  <button class="btn-custom w-100">sign up</button>
+</form>
+{% endmacro %}
+
+{% macro entry_editor(class='') %}
+<form onsubmit="event.preventDefault(); entryAdd();" class="{{ class }}">
+  <div id="content" contenteditable="true" class="input-custom"></div>
+  <input type="color" class="input-custom" id="mood" autocomplete="off">
+  <button type="submit" class="btn-custom"><i class="bi bi-plus-lg"></i></button>
+</form>
+{% endmacro %}
