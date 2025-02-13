@@ -1,0 +1,156 @@
+:root,
+html[data-theme="light"] {
+  --primary-bg: #cccccc;
+  --primary-txt: #1a1a1a;
+
+  --secondary-bg: #b3b3b3;
+
+  --btn-color: hsl(283, 27%, 40%);
+  --btn-hover-txt: #cccccc;
+}
+
+html[data-theme="dark"] {
+  --primary-bg: #1a1a1a;
+  --primary-txt: #cccccc;
+
+  --secondary-bg: #242424;
+
+  --btn-color: hsl(283, 27%, 70%);
+  --btn-hover-txt: #1a1a1a;
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-txt);
+}
+
+.form-control,
+.form-control:focus {
+  background-color: var(--secondary-bg);
+  color: var(--primary-txt);
+  border: 0;
+}
+
+::placeholder {
+  color: var(--primary-txt) !important;
+  letter-spacing: 2px !important;
+  opacity: 50% !important;
+}
+
+.dropdown-menu,
+.dropdown-item {
+  background-color: var(--primary-bg);
+  color: var(--primary-txt);
+}
+
+.dropdown-menu {
+  font-size: small;
+  border-color: var(--btn-color);
+}
+
+a,
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.btn {
+  background-color: transparent;
+  color: var(--btn-color);
+  border-color: var(--btn-color);
+  letter-spacing: 2px;
+}
+
+.btn:hover,
+.btn.active {
+  background-color: var(--btn-color);
+  color: var(--btn-hover-txt);
+  border-color: transparent;
+}
+
+.dropdown-item:hover,
+.dropdown-item.active {
+  background-color: var(--btn-color);
+  color: var(--btn-hover-txt);
+}
+
+.month {
+  width: 271px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.menu {
+  width: 221px;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+}
+
+.day {
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  background-color: var(--secondary-bg);
+  cursor: pointer;
+  margin: 2px;
+}
+
+.filler {
+  background-color: var(--primary-bg);
+  cursor: unset;
+}
+
+.filled {
+  background-color: var(--btn-color);
+}
+
+.border-end {
+  border-right-color: var(--btn-color) !important;
+  border-right-width: 0.5px !important;
+}
+
+hr {
+  border-color: var(--btn-color) !important;
+}
+
+.between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hovered-day {
+  border: 3px solid hsl(0, 91%, 64%);
+}
+
+.selected-day {
+  border: 5px solid var(--primary-bg);
+  border-radius: 10px;
+}
+
+.h5 {
+  letter-spacing: 2px;
+}
+
+.btn:disabled {
+  visibility: hidden;
+}
+
+textarea {
+  resize: none;
+}
+
+#reader,
+#editor {
+  padding: 10px 25px;
+}
+
+#reader code,
+#reader h1,
+#reader h2,
+#reader h3,
+#reader h4,
+#reader h5 {
+  color: var(--btn-color);
+}
