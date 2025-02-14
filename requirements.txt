@@ -1,0 +1,4 @@
+click==8.1.7
+Flask==3.1.0
+python_frontmatter==0.5.0
+setuptools==75.6.0

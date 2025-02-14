@@ -1,0 +1,30 @@
+:root,
+html[data-theme="light"] {
+  --primary-bg: #cccccc;
+  --primary-txt: #1a1a1a;
+
+  --secondary-bg: #b3b3b3;
+
+  --red: #d23636;
+  --orange: #d98d00;
+  --green: #346f43;
+  --blue: #6565ff;
+
+  --btn-color: #724a82;
+  --btn-hover-txt: #cccccc;
+}
+
+html[data-theme="dark"] {
+  --primary-bg: #1a1a1a;
+  --primary-txt: #cccccc;
+
+  --secondary-bg: #242424;
+
+  --red: #ff4c4c;
+  --orange: #ffa600;
+  --green: #639363;
+  --blue: #6161ff;
+
+  --btn-color: #bb9ec7;
+  --btn-hover-txt: #1a1a1a;
+}

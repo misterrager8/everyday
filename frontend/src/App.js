@@ -7,7 +7,7 @@ import Display from "./components/organisms/Display";
 
 function App() {
   return (
-    <div className="row p-4 vh-100">
+    <div className="row p-4" style={{ height: "100vh", width: "100vw" }}>
       <Display />
     </div>
   );

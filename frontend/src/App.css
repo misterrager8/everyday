@@ -1,23 +1,4 @@
-:root,
-html[data-theme="light"] {
-  --primary-bg: #cccccc;
-  --primary-txt: #1a1a1a;
-
-  --secondary-bg: #b3b3b3;
-
-  --btn-color: hsl(283, 27%, 40%);
-  --btn-hover-txt: #cccccc;
-}
-
-html[data-theme="dark"] {
-  --primary-bg: #1a1a1a;
-  --primary-txt: #cccccc;
-
-  --secondary-bg: #242424;
-
-  --btn-color: hsl(283, 27%, 70%);
-  --btn-hover-txt: #1a1a1a;
-}
+@import "./colors.css";
 
 body {
   background-color: var(--primary-bg);
@@ -75,10 +56,30 @@ a:hover {
   color: var(--btn-hover-txt);
 }
 
+.dropdown-item {
+  letter-spacing: 1px;
+}
+
 .month {
-  width: 271px;
+  width: 207px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+.day {
+  height: 22px;
+  width: 22px;
+  border-radius: 5px;
+  background-color: var(--secondary-bg);
+  cursor: pointer;
+  margin: 2px;
+}
+
+.weekday {
+  width: 26px;
+  text-align: center;
+  font-size: 0.65rem;
 }
 
 .menu {
@@ -86,15 +87,6 @@ a:hover {
   display: flex;
   justify-content: space-between;
   margin: auto;
-}
-
-.day {
-  height: 30px;
-  width: 30px;
-  border-radius: 5px;
-  background-color: var(--secondary-bg);
-  cursor: pointer;
-  margin: 2px;
 }
 
 .filler {
@@ -121,12 +113,12 @@ hr {
 }
 
 .hovered-day {
-  border: 3px solid hsl(0, 91%, 64%);
+  border: 3px solid var(--blue);
 }
 
 .selected-day {
-  border: 5px solid var(--primary-bg);
-  border-radius: 10px;
+  border: 4px solid var(--primary-bg);
+  border-radius: 9px;
 }
 
 .h5 {
@@ -146,11 +138,131 @@ textarea {
   padding: 10px 25px;
 }
 
+#reader a {
+  text-decoration: underline;
+  font-style: italic;
+}
+
 #reader code,
 #reader h1,
 #reader h2,
 #reader h3,
 #reader h4,
-#reader h5 {
+#reader h5,
+#reader a {
   color: var(--btn-color);
+}
+
+#reader h1,
+#reader h2,
+#reader h3,
+#reader h4,
+#reader h5 {
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: lighter;
+  margin-bottom: 20px;
+}
+
+#reader pre {
+  width: 75%;
+  margin: 10px auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 1.25;
+}
+
+#reader mark {
+  background-color: transparent;
+  color: var(--orange);
+  font-style: italic;
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  background-color: var(--primary-bg);
+  width: 2px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--btn-color);
+}
+
+.bottom {
+  bottom: 0;
+  position: absolute;
+  left: 0;
+  width: 16.67%;
+}
+
+.badge {
+  padding: 0.3em 0.95em;
+  margin-top: auto;
+  font-size: 0.75em;
+  margin-bottom: auto;
+  font-weight: unset;
+  letter-spacing: 1px;
+  color: var(--btn-color);
+  border: 1px solid var(--btn-color);
+  border-radius: 10px;
+}
+
+.active > .badge,
+.dropdown-item:hover > .badge,
+.entry-btn:hover > .badge {
+  color: var(--btn-hover-txt);
+  border-color: var(--btn-hover-txt);
+}
+
+.entry-btn {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border: 0;
+}
+
+.yellow-bg {
+  background-color: var(--orange);
+}
+
+.yellow {
+  color: var(--orange);
+}
+
+.yellow:hover {
+  background-color: var(--orange);
+  color: #1a1a1a;
+}
+
+.red {
+  color: var(--red);
+}
+
+.red:hover {
+  background-color: var(--red);
+  color: #1a1a1a;
+}
+
+.green {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.green:hover {
+  background-color: var(--green);
+  color: #cccccc;
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.blue:hover {
+  background-color: var(--blue);
+  color: #cccccc;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }

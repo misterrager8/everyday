@@ -27,14 +27,16 @@ def get_journals():
     success = True
     msg = ""
     journals_ = []
+    entries_ = []
 
     try:
         journals_ = [i.todict() for i in Journal.all()]
+        entries_ = [i.todict() for i in Entry.get_all_favorites()]
     except Exception as e:
         success = False
         msg = str(e)
 
-    return {"success": success, "msg": msg, "journals": journals_}
+    return {"success": success, "msg": msg, "journals": journals_, "entries": entries_}
 
 
 @current_app.post("/get_journal")
@@ -154,6 +156,24 @@ def delete_entry():
         "journals": journals_,
         "journal": journal_,
     }
+
+
+@current_app.post("/toggle_favorite")
+def toggle_favorite():
+    success = True
+    msg = ""
+    entry_ = None
+
+    try:
+        entry_ = Entry(request.json.get("path"))
+        entry_.toggle_favorite()
+
+        entry_ = entry_.todict()
+    except Exception as e:
+        success = False
+        msg = str(e)
+
+    return {"success": success, "msg": msg, "entry": entry_}
 
 
 @current_app.post("/delete_journal")

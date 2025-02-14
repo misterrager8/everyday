@@ -12,7 +12,9 @@ export default function Button({
       disabled={disabled}
       type={type_}
       onClick={onClick}
-      className={className + " btn" + (size ? ` btn-${size}` : "")}>
+      className={
+        className + " btn text-truncate" + (size ? ` btn-${size}` : "")
+      }>
       {icon && <i className={(text ? "me-2" : "ms-2") + " bi bi-" + icon}></i>}
       {text}
       {!text && <span>&nbsp;</span>}

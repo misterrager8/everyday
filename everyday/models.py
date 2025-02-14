@@ -3,6 +3,8 @@ import datetime
 import pathlib
 import shutil
 
+import frontmatter
+
 from everyday import config
 
 
@@ -37,11 +39,7 @@ class Journal:
                         "weekdayInt": i.weekday(),
                         "monthLabel": i.strftime("%B %Y"),
                         "fullLabel": i.strftime("%B %-d, %Y"),
-                        "entry": (
-                            {"content": match[0].content, "path": str(match[0].path)}
-                            if len(match) > 0
-                            else None
-                        ),
+                        "entry": (match[0].todict() if len(match) > 0 else None),
                     }
                 )
 
@@ -74,23 +72,74 @@ class Journal:
         return {
             "name": self.name,
             "path": str(self.path),
+            "count": len(self.entries),
         }
 
 
 class Entry:
     def __init__(self, path):
-        self.path = path
+        self.path = pathlib.Path(path)
+
+    @property
+    def frontmatter(self):
+        _ = frontmatter.load(self.path)
+        if not frontmatter.check(self.path):
+            _.metadata.update({"favorited": False})
+
+        return _
 
     @property
     def date_created(self) -> datetime.datetime:
         return datetime.datetime.fromtimestamp(self.path.stat().st_birthtime)
 
     @property
-    def content(self):
-        return open(self.path).read()
+    def last_modified(self) -> datetime.datetime:
+        return datetime.datetime.fromtimestamp(self.path.stat().st_mtime)
 
-    def edit(self, content):
-        open(self.path, "w").write(content)
+    @property
+    def favorited(self):
+        return self.frontmatter.get("favorited")
+
+    @property
+    def formatted_name(self):
+        file_name = datetime.datetime.strptime(self.path.stem, "%Y-%m-%d")
+        formatted = file_name.strftime("%-m/%-d")
+
+        return formatted
+
+    @property
+    def content(self):
+        return self.frontmatter.content
+
+    def edit(self, content: str):
+        _ = self.frontmatter
+        _.content = content
+        self.edit_frontmatter(_)
+
+    def edit_frontmatter(self, metadata: dict):
+        new_data = frontmatter.dumps(metadata)
+        open(self.path, "w").write(new_data)
+
+    def toggle_favorite(self):
+        _ = self.frontmatter
+        _.metadata.update({"favorited": not _.metadata.get("favorited")})
+        self.edit_frontmatter(_)
 
     def delete(self):
         pathlib.Path(self.path).unlink()
+
+    @classmethod
+    def get_all_favorites(cls):
+        return [Entry(i) for i in config.HOME_DIR.glob("**/*.txt")]
+
+    def todict(self) -> dict:
+        return {
+            "name": self.path.stem,
+            "nameFormatted": self.formatted_name,
+            "path": str(self.path),
+            "journal": self.path.parent.name,
+            "content": self.content,
+            "favorited": self.favorited,
+            "date_created": self.date_created.strftime("%-m/%-d/%y @ %-I:%M %p"),
+            "last_modified": self.last_modified.strftime("%-m/%-d/%y @ %-I:%M %p"),
+        }

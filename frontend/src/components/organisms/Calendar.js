@@ -2,11 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { api } from "../../util";
 import { MultiContext } from "./Display";
 import Button from "../atoms/Button";
+import Icon from "../atoms/Icon";
+
+const weekdays = ["S", "M", "T", "W", "Th", "F", "S"];
 
 export default function Calendar({ className = "" }) {
   const multiCtx = useContext(MultiContext);
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const [favorited, setFavorited] = useState(false);
+  const [count, setCount] = useState(0);
 
   const getJournal = () => {
     api(
@@ -18,8 +24,14 @@ export default function Calendar({ className = "" }) {
       },
       (data) => {
         let days_ = data.days;
+
         let offset = days_[0].weekdayInt;
+        let offsetEnd = days_[days_.length - 1].weekdayInt;
+
         let filler = Array(offset + 1).fill({ filler: true });
+        let fillerEnd = Array(Math.abs(offsetEnd - 7)).fill({ filler: true });
+
+        days_ = days_.concat(fillerEnd);
 
         multiCtx.setDays(offset + 1 < 7 ? filler.concat(days_) : days_);
       }
@@ -37,6 +49,17 @@ export default function Calendar({ className = "" }) {
         multiCtx.setCurrentJournal(data.journal);
         multiCtx.setJournals(data.journals);
       }
+    );
+  };
+
+  const toggleFavorite = () => {
+    api(
+      "toggle_favorite",
+      {
+        journalName: multiCtx.currentJournal?.name,
+        path: multiCtx.selectedDay?.entry?.path,
+      },
+      (data) => setFavorited(data.entry.favorited)
     );
   };
 
@@ -96,23 +119,36 @@ export default function Calendar({ className = "" }) {
   }, [multiCtx.currentMonth]);
 
   useEffect(() => {
-    let today = new Date();
+    setCount(multiCtx.days.filter((x) => x.entry).length);
     currentMonthSelected() &&
-      multiCtx.setSelectedDay(multiCtx.days[multiCtx.days.length - 1]);
+      multiCtx.setSelectedDay(
+        multiCtx.days.find((x) => x.day === new Date().getDate())
+      );
   }, [multiCtx.days]);
+
+  useEffect(() => {
+    if (multiCtx.selectedDay && multiCtx.selectedDay?.entry) {
+      setFavorited(multiCtx.selectedDay?.entry?.favorited);
+    }
+  }, [multiCtx.selectedDay]);
 
   return (
     <div className={className + " d-flex"}>
       <div className="m-auto">
-        <div className="text-center h5">
-          {multiCtx.hoveredDay
-            ? multiCtx.hoveredDay?.fullLabel
-            : multiCtx.selectedDay
-            ? multiCtx.selectedDay?.fullLabel
-            : multiCtx.days[multiCtx.days.length - 1]?.monthLabel}
+        <div className="text-center mb-3">
+          <div className="h5 m-0">
+            {multiCtx.hoveredDay
+              ? multiCtx.hoveredDay?.fullLabel
+              : multiCtx.selectedDay
+              ? multiCtx.selectedDay?.fullLabel
+              : multiCtx.days.find((x) => !x.filler)?.monthLabel}
+          </div>
           &nbsp;
+          <span className="badge border-0">{`${count} Entr${
+            count === 1 ? "y" : "ies"
+          }`}</span>
         </div>
-        <div className="between pe-4">
+        <div className="between">
           <Button
             onClick={() => prevMonth()}
             icon="arrow-left"
@@ -121,14 +157,14 @@ export default function Calendar({ className = "" }) {
           {!currentMonthSelected() ? (
             <Button
               onClick={() => resetMonth()}
-              icon="record-fill"
-              className="border-0"
+              icon="fast-forward-fill"
+              className="blue border-0"
               text="Today"
             />
           ) : (
             <Button
               onClick={() => multiCtx.addEntry()}
-              className="border-0"
+              className="green border-0"
               icon="plus-lg"
               text="New"
             />
@@ -145,6 +181,9 @@ export default function Calendar({ className = "" }) {
         <div
           className="month mt-3"
           onMouseLeave={() => multiCtx.setHoveredDay(null)}>
+          {weekdays.map((x) => (
+            <div className="weekday mb-2">{x}</div>
+          ))}
           {multiCtx.days.map((x) => (
             <div
               key={x.id}
@@ -153,10 +192,14 @@ export default function Calendar({ className = "" }) {
                   x.id === multiCtx.selectedDay?.id ? null : x
                 )
               }
-              onMouseEnter={() => multiCtx.setHoveredDay(x)}
+              onMouseEnter={() => multiCtx.setHoveredDay(x.filler ? null : x)}
               className={
                 "day" +
-                (x.filler ? " filler" : "") +
+                (x.filler
+                  ? " filler"
+                  : x?.entry?.favorited
+                  ? " yellow-bg"
+                  : "") +
                 (isFilled(x) ? " filled" : "") +
                 (isHovered(x) ? " hovered-day" : "") +
                 (isSelected(x) ? " selected-day" : "")
@@ -168,8 +211,12 @@ export default function Calendar({ className = "" }) {
           <>
             <hr />
             <div className="d-flex">
-              <div className="btn-group mx-auto">
-                <Button className="border-0" icon="star" />
+              <div className="mx-auto">
+                <Button
+                  onClick={() => toggleFavorite()}
+                  className="yellow border-0"
+                  icon={"star" + (favorited ? "-fill" : "")}
+                />
                 <Button
                   onClick={() => copyNote()}
                   className="border-0"
@@ -178,19 +225,32 @@ export default function Calendar({ className = "" }) {
                 {deleting && (
                   <Button
                     onClick={() => deleteEntry()}
-                    className="border-0"
+                    className="red border-0"
                     icon="question-lg"
                   />
                 )}
                 <Button
                   onClick={() => setDeleting(!deleting)}
-                  className="border-0"
+                  className="red border-0"
                   icon="trash2"
                 />
               </div>
             </div>
           </>
         )}
+        <div className="mt-4">
+          {multiCtx.days
+            .filter((x) => x.entry && x.entry?.favorited)
+            .map((y) => (
+              <button className="entry-btn btn btn-sm">
+                <div className="">
+                  <Icon className="yellow" name="star-fill me-2" />
+                  <span>{y.entry.nameFormatted}</span>
+                </div>
+                <span className="ms-2 badge ">{y.entry.journal}</span>
+              </button>
+            ))}
+        </div>
       </div>
     </div>
   );

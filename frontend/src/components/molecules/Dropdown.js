@@ -8,12 +8,14 @@ export default function Dropdown({
   classNameBtn = "",
   classNameMenu = "",
   children,
+  autoClose = true,
 }) {
   return (
     <>
       <a
         data-bs-target={"#" + target}
         data-bs-toggle="dropdown"
+        data-bs-auto-close={autoClose}
         className={
           classNameBtn + " btn dropdown-toggle" + (size ? ` btn-${size}` : "")
         }>
